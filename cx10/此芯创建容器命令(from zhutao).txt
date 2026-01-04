@@ -1,0 +1,25 @@
+创建容器命令步骤：
+docker rm -f android0
+
+tar -xvf sky1_evb-10-user-super.img.tgz
+
+mkdir super_img
+mkdir super_img/root
+mount super_img/system.img super_img/root -o rw
+mount super_img/system_ext.img super_img/root/system_ext -o rw #安卓10无需执行这行
+mount super_img/product.img super_img/root/product -o rw
+mount super_img/vendor.img super_img/root/vendor -o rw
+rm super_img/root/vendor/etc/fstab.cix
+
+docker rmi -f cix_android:10
+
+tar --xattrs -c -C super_img/root . | docker import -c 'ENTRYPOINT ["/init", "androidboot.hardware=cix"]' - cix_android:10
+
+umount super_img/root/system_ext #安卓10无需执行这行
+umount super_img/root/product
+umount super_img/root/vendor
+umount super_img/root/vendor
+umount super_img/root
+rm -rf super_img
+
+docker run -itd --restart=always --hostname=android0 --name=android0 --network=bridge_xx --privileged -v /data/android_data/data_1:/data -p 6666:5555 --cpuset-cpus=0-11 --env PATH=/sbin:/system/sbin:/product/bin:/apex/com.android.runtime/bin:/system/bin:/system/xbin:/odm/bin:/vendor/bin:/vendor/xbin:/data/local/tmp/plugin/bin cix_android:10 androidboot.redroid_net_ndns=1 androidboot.redroid_net_dns1=114.114.114.114
