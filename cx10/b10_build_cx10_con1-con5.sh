@@ -38,7 +38,9 @@ create_container() {
         --env prop.persist.sys.display.height=1280 \
         --env prop.persist.sys.display.vsync=30 \
         --env prop.persist.sys.display.dpi=320 \
+        --env prop.persist.adbd.enable=1 \
         --env prop.persist.vdbd.enable=1 \
+        --env prop.persist.adbkey.pub=0 \
         --env prop.persist.vdbkey.pub=0 \
         --env prop.hide.net.iface.name=wlan0 \
         --env prop.persist.hide.customization=mp-default \

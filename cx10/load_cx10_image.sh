@@ -1,11 +1,7 @@
 #!/bin/bash
 
-docker rm -f android0
-
-#CURT_DATE=20241118
 CURT_DATE=$(date  +%Y%m%d)
 #CURT_DATE=$(date  +%Y%m%d.%H%M)
-#CURT_DATE=20241231
 #CURT_DATE=20250828
 
 tar -xvf sky1_evb-10-user-super.img.tgz

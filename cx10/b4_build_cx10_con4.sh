@@ -42,11 +42,11 @@ docker create \
     --env prop.ro.hide.vps.debug=1 \
     --env prop.hide.mtrace.enable=1 \
     --env prop.hide.mtrace.prefix=HHHM==== \
-    --mac-address=f0:d7:af:c4:65:68 \
+    --mac-address=f0:d7:af:c4:65:40 \
     -p 5004:5555 \
     --env PATH=/sbin:/system/sbin:/product/bin:/apex/com.android.runtime/bin:/system/bin:/system/xbin:/odm/bin:/vendor/bin:/vendor/xbin:/data/local/tmp/plugin/bin \
     cix_android:10 \
-    androidboot.redroid_net_ndns=1 \
+    androidboot.redroid_net_ndns=2 \
     androidboot.redroid_net_dns1=223.5.5.5 \
     androidboot.redroid_net_dns1=223.6.6.6 \
 

@@ -25,16 +25,19 @@ docker create \
     --env prop.persist.sys.display.height=1280 \
     --env prop.persist.sys.display.vsync=30 \
     --env prop.persist.sys.display.dpi=320 \
+    --env prop.persist.adbd.enable=1 \
     --env prop.persist.vdbd.enable=1 \
+    --env prop.persist.adbkey.pub=0 \
     --env prop.persist.vdbkey.pub=0 \
     --env prop.hide.net.iface.name=wlan0 \
     --env prop.persist.hide.customization=mp-default \
+    --mac-address=f0:d7:af:c4:65:30 \
     -p 5003:5555 \
-	--env PATH=/sbin:/system/sbin:/product/bin:/apex/com.android.runtime/bin:/system/bin:/system/xbin:/odm/bin:/vendor/bin:/vendor/xbin:/data/local/tmp/plugin/bin \
-	cix_android:10 \
-	androidboot.redroid_net_ndns=1 \
-	androidboot.redroid_net_dns1=223.5.5.5 \
-	androidboot.redroid_net_dns1=223.6.6.6 \
+    --env PATH=/sbin:/system/sbin:/product/bin:/apex/com.android.runtime/bin:/system/bin:/system/xbin:/odm/bin:/vendor/bin:/vendor/xbin:/data/local/tmp/plugin/bin \
+    cix_android:10 \
+    androidboot.redroid_net_ndns=2 \
+    androidboot.redroid_net_dns1=223.5.5.5 \
+    androidboot.redroid_net_dns1=223.6.6.6 \
 
 echo "start con3 container ..."
 docker start con3
