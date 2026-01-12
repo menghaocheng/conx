@@ -1,0 +1,16 @@
+
+
+PackageName:com.fgcq.a139945; Activity:org.cocos2dx.cpp.AppActivity; Label:永恒征战; Size:217344000; VersionName:4.7.2; Uid:10096;
+
+mctest01 ABC123456
+mctest02 ABC123456
+mctest03 ABC123456
+mctest04 ABC123456
+
+PackageName:com.xqhy.legendbox; Activity:com.xqhy.legendbox.main.splash.SplashActivity; Label:996传奇盒子; Size:1008354304; VersionName:4.8.1; Uid:10097;
+
+绑定手机号：13249053519
+mctest01 ABC123456 #主号
+mctest02
+mctest03
+

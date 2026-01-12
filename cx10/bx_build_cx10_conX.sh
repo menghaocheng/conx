@@ -54,5 +54,9 @@ create_container() {
     docker start "$name"
 }
 
-create_container 2
+if [ -z "$1" ]; then
+    echo "Usage: $0 <container_number>"
+    exit 1
+fi
 
+create_container $1
