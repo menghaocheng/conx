@@ -8,7 +8,7 @@ CURT_DATE=$(date  +%Y%m%d)
 #CURT_DATE=20241231
 #CURT_DATE=20250828
 
-tar -xvf sky1_evb-10-user-super.img.tgz
+tar -xvf rk3588_docker-android10-user-super.img-$CURT_DATE.tgz
 
 mkdir -p super_img/root
 mount super_img/system.img super_img/root -o rw

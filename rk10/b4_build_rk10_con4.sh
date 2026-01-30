@@ -40,7 +40,7 @@ docker create  \
     --env prop.ro.hide.vps.debug=1 \
     --env prop.hide.mtrace.enable=1 \
     --env prop.hide.mtrace.prefix=HHHM==== \
-    --mac-address=f0:d7:af:c4:65:68 \
+    --mac-address=f0:d7:af:c4:65:40 \
     -p 5004:5555 \
     -p 6022:22 \
     -p 27042:27042 \

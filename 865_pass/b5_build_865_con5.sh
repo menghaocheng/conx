@@ -43,7 +43,7 @@ docker create  \
     --env PATH=/system/bin:/system/sbin:/system/xbin:/system_ext/bin:/vendor/bin:/vendor/xbin:/odm/bin:/oem/bin:/product/bin:/data/bin:/data/local/tmp/plugin/bin \
     android:latest \
     androidboot.redroid_net_dns1=223.5.5.5 \
-    androidboot.redroid_net_dns2=223.6.6.7 \
+    androidboot.redroid_net_dns2=223.6.6.6 \
     androidboot.redroid_net_ndns=2
 
 

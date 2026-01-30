@@ -42,7 +42,7 @@ docker create  \
     -p ${ADB_PORT}:5555 \
     android:latest \
     androidboot.redroid_net_dns1=223.5.5.5 \
-    androidboot.redroid_net_dns2=223.6.6.7 \
+    androidboot.redroid_net_dns2=223.6.6.6 \
     androidboot.redroid_net_ndns=2
 
 docker start ${CON_NAME}
