@@ -20,8 +20,9 @@ mount super_img/odm.img super_img/root/odm -o rw
 docker rmi rk3588:RK_ANDROID10-RKR10 > /dev/null 2>&1
 
 #tar --xattrs -c -C super_img/root . | sudo docker import -c 'ENTRYPOINT ["/init", "androidboot.hardware=rk30board"]' - rk3588:RK_ANDROID10-RKR10
-tar --xattrs -c -C super_img/root . | sudo docker import -c 'ENTRYPOINT ["/init"]' - rk3588:RK_ANDROID10-RKR10
-
+tar --xattrs -c -C super_img/root . | docker import -c 'ENTRYPOINT ["/init"]' - rk3588:RK_ANDROID10-RKR10
+# 修正参数位置 + 补充容错 + 统一权限上下文
+# sudo tar --xattrs -c -C super_img/root . | sudo docker import - -c 'ENTRYPOINT ["/init"]' rk3588:RK_ANDROID10-RKR10
 
 umount super_img/root/product
 umount super_img/root/vendor

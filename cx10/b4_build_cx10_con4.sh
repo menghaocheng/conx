@@ -1,6 +1,16 @@
 #!/usr/bin/bash
 
 
+careate_bridge_network() {
+    # docker network rm bridge_new
+    # docker network create --driver=bridge --subnet=192.168.15.0/24 bridge_new 2>/dev/null
+
+    docker network create --driver=bridge --subnet=192.168.15.0/24 \
+        -o com.docker.network.bridge.enable_ip_masquerade=true \
+        -o com.docker.network.bridge.enable_icc=true \
+        bridge_new 2>/dev/null
+}
+
 create_container() {
     local num=$1
     local name="con$num"
@@ -8,7 +18,7 @@ create_container() {
     local mac=f0:d7:af:c4:65:$(printf '%02x' $((0x40 + num)))
     
     docker rm -f "$name" 2>/dev/null
-    docker network create --driver=bridge --subnet=192.168.15.0/24 bridge_new 2>/dev/null
+
     #rm -fr "/data/local/$name"
     
     docker create  \
@@ -49,10 +59,12 @@ create_container() {
         cix_android:10 \
         androidboot.redroid_net_ndns=2 \
         androidboot.redroid_net_dns1=223.5.5.5 \
-        androidboot.redroid_net_dns1=223.6.6.6 \
+        androidboot.redroid_net_dns2=223.6.6.6 \
     
     docker start "$name"
 }
+
+careate_bridge_network
 
 create_container 4
 

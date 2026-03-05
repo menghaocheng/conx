@@ -1,19 +1,18 @@
 #!/usr/bin/bash
 
-docker rm -f con5 > /dev/null 2>&1
+docker rm -f con2 > /dev/null 2>&1
 
 docker network create --driver=bridge --subnet=192.168.15.0/24 bridge_new > /dev/null 2>&1
-
-#rm -fr /data/local/con5
+#rm -fr /data/local/con2
 docker create  \
     --restart=always \
-    --hostname=con5 \
-    --name=con5 \
+    --hostname=con2 \
+    --name=con2 \
     --network=bridge_new \
     --privileged \
     --memory 8G\
     --memory-swap 10G \
-    -v /data/local/con5:/data \
+    -v /data/local/con2:/data \
     -v /var/lib/lxcfs/proc/cpuinfo:/proc/cpuinfo:rw  \
     -v /var/lib/lxcfs/proc/diskstats:/proc/diskstats:rw   \
     -v /var/lib/lxcfs/proc/meminfo:/proc/meminfo:rw   \
@@ -29,6 +28,9 @@ docker create  \
     --env prop.persist.adbkey.pub=0 \
     --env prop.persist.vdbkey.pub=0 \
     --env prop.hide.net.iface.name=wlan0 \
+    --env prop.ro.instance.id=RK3S07P1402515718_3b7a525d-f488-4a7f-9afb-e80209cd8d00 \
+    --env prop.persist.sys.SignalAddress=nats://web-szyf.phone.androidscloud.com:4432 \
+    --env prop.persist.sys.SN=5002 \
     --env prop.persist.sys.pushstream=1 \
     --env prop.persist.hide.customization=mp-mp3 \
     --env prop.ro.hide.release.rw.enable=0 \
@@ -38,15 +40,15 @@ docker create  \
     --env prop.ro.hide.vps.debug=1 \
     --env prop.hide.mtrace.enable=1 \
     --env prop.hide.mtrace.prefix=HHHM==== \
-    --mac-address=f0:d7:af:c4:65:50 \
-    -p 5005:5555 \
+    --mac-address=f0:d7:af:c4:65:40 \
+    -p 5002:5555 \
     --env PATH=/system/bin:/system/sbin:/system/xbin:/system_ext/bin:/vendor/bin:/vendor/xbin:/odm/bin:/oem/bin:/product/bin:/data/bin:/data/local/tmp/plugin/bin \
     --dns=8.8.8.8 \
     --dns-search=. \
     rk3588:RK_ANDROID10-RKR10 \
 
 #--env prop.persist.hide.customization=mp-jz \
-#-v /data/local/con5:/data \
+#-v /data/local/con2:/data \
 #        -v /var/lib/lxcfs/proc/cpuinfo:/proc/cpuinfo:rw  \
 #        -v /var/lib/lxcfs/proc/diskstats:/proc/diskstats:rw   \
 #        -v /var/lib/lxcfs/proc/meminfo:/proc/meminfo:rw   \
@@ -60,7 +62,7 @@ docker create  \
 #	androidboot.redroid_net_ndns=2
 
 
-docker start con5
+docker start con2
 
 #       --cpu-period 100000 \
 #        --cpu-quota 500000 \

@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-docker rm -f con3
+docker rm -f con3 > /dev/null 2>&1
 
-docker network create --driver=bridge --subnet=192.168.15.0/24 bridge_new
+docker network create --driver=bridge --subnet=192.168.15.0/24 bridge_new > /dev/null 2>&1
 #rm -fr /data/local/con3
 docker create  \
     --restart=always \

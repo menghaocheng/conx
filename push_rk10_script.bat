@@ -4,11 +4,14 @@ set /p ip_port=<ip_port.txt
 set HX=rk10
 adb -s %ip_port% shell "mkdir -p /data/local/"
 adb -s %ip_port% push .\%HX%\update_image.sh  /data/local/
-adb -s %ip_port% push .\%HX%\update2_image.sh  /data/local/
+@REM adb -s %ip_port% push .\%HX%\update2_image.sh  /data/local/
 adb -s %ip_port% push .\%HX%\load_rk10_image.sh /data/local/
-adb -s %ip_port% push .\%HX%\load2_rk10_image.sh /data/local/
+@REM adb -s %ip_port% push .\%HX%\load2_rk10_image.sh /data/local/
+adb -s %ip_port% push .\%HX%\b1_build_rk10_con1.sh /data/local/
+adb -s %ip_port% push .\%HX%\b2_build_rk10_con2.sh /data/local/
 adb -s %ip_port% push .\%HX%\b3_build_rk10_con3.sh /data/local/
 adb -s %ip_port% push .\%HX%\b4_build_rk10_con4.sh /data/local/
+adb -s %ip_port% push .\%HX%\ib4_build_rk10_con4.sh /data/local/
 adb -s %ip_port% push .\%HX%\b5_build_rk10_con5.sh /data/local/
 adb -s %ip_port% push .\%HX%\b10_build_rk10_con1-con5.sh /data/local/
 adb -s %ip_port% push .\%HX%\b11_build_rk_conX.sh /data/local/

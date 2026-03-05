@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-docker rm -f con4
+docker rm -f con4 > /dev/null 2>&1
 
-docker network create --driver=bridge --subnet=192.168.15.0/24 bridge_new
+docker network create --driver=bridge --subnet=192.168.15.0/24 bridge_new > /dev/null 2>&1
 #rm -fr /data/local/con4
 docker create  \
     --restart=always \
@@ -42,8 +42,6 @@ docker create  \
     --env prop.hide.mtrace.prefix=HHHM==== \
     --mac-address=f0:d7:af:c4:65:40 \
     -p 5004:5555 \
-    -p 6022:22 \
-    -p 27042:27042 \
     --env PATH=/system/bin:/system/sbin:/system/xbin:/system_ext/bin:/vendor/bin:/vendor/xbin:/odm/bin:/oem/bin:/product/bin:/data/bin:/data/local/tmp/plugin/bin \
     --dns=8.8.8.8 \
     --dns-search=. \
