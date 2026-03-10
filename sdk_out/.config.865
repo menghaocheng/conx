@@ -1,0 +1,32 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	#url = http://192.168.32.253:3000/Qualcomm865/Qualcomm865_vir.git
+	url = ssh://admin@code.vclusters.com:29418/vclusters/Qualcomm865_vir
+	# url = ssh://git@192.168.134.9:2222/android-vir-group/qcom865/paas_865_android10.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[branch "vclusters_public_ty"]
+	remote = origin
+	merge = refs/heads/vclusters_public_ty
+[branch "vclusters_public_sdk_ty"]
+	remote = origin
+	merge = refs/heads/vclusters_public_sdk_ty
+	vscode-merge-base = origin/vclusters_public_ty
+[branch "vclusters_public_sdk"]
+	remote = origin
+	merge = refs/heads/vclusters_public_sdk
+	vscode-merge-base = origin/vclusters_public_sdk
+[branch "vclusters_public"]
+	remote = origin
+	merge = refs/heads/vclusters_public
+[pull]
+	rebase = true
+[branch "public"]
+	remote = origin
+	merge = refs/heads/public

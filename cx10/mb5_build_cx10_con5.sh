@@ -1,6 +1,16 @@
 #!/usr/bin/bash
 
 
+careate_bridge_network() {
+    # docker network rm bridge_new
+    # docker network create --driver=bridge --subnet=192.168.15.0/24 bridge_new 2>/dev/null
+
+    docker network create --driver=bridge --subnet=192.168.15.0/24 \
+        -o com.docker.network.bridge.enable_ip_masquerade=true \
+        -o com.docker.network.bridge.enable_icc=true \
+        bridge_new 2>/dev/null
+}
+
 create_container() {
     local num=$1
     local name="con$num"
@@ -8,7 +18,7 @@ create_container() {
     local mac=f0:d7:af:c4:65:$(printf '%02x' $((0x40 + num)))
     
     docker rm -f "$name" 2>/dev/null
-    docker network create --driver=bridge --subnet=192.168.15.0/24 bridge_new 2>/dev/null
+
     #rm -fr "/data/local/$name"
     
     docker create  \
@@ -20,15 +30,12 @@ create_container() {
         --memory 8G\
         --memory-swap 10G \
         -v /data/local/${name}:/data \
-        -v /var/lib/lxcfs/proc/cpuinfo:/proc/cpuinfo:rw  \
-        -v /var/lib/lxcfs/proc/diskstats:/proc/diskstats:rw   \
-        -v /var/lib/lxcfs/proc/meminfo:/proc/meminfo:rw   \
-        -v /var/lib/lxcfs/proc/stat:/proc/stat:rw  \
-        -v /var/lib/lxcfs/proc/swaps:/proc/swaps:rw  \
-        -v /var/lib/lxcfs/proc/uptime:/proc/uptime:rw \
+        --device /dev/binder10:/dev/binder:rwm \
+        --device /dev/binder11:/dev/hwbinder:rwm \
+        --device /dev/binder12:/dev/vndbinder:rwm \
         --env prop.persist.sys.display.width=720 \
         --env prop.persist.sys.display.height=1280 \
-        --env prop.persist.sys.display.vsync=24 \
+        --env prop.persist.sys.display.vsync=30 \
         --env prop.persist.sys.display.dpi=320 \
         --env prop.persist.adbd.enable=1 \
         --env prop.persist.vdbd.enable=1 \
@@ -49,14 +56,12 @@ create_container() {
         cix_android:10 \
         androidboot.redroid_net_ndns=2 \
         androidboot.redroid_net_dns1=223.5.5.5 \
-        androidboot.redroid_net_dns1=223.6.6.6 \
+        androidboot.redroid_net_dns2=223.6.6.6 \
     
     docker start "$name"
 }
 
-if [ -z "$1" ]; then
-    echo "Usage: $0 <container_number>"
-    exit 1
-fi
+careate_bridge_network
 
-create_container $1
+create_container 5
+

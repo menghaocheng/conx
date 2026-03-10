@@ -1,0 +1,122 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	# url = http://192.168.32.253:3000/vclusters/Rockchip_RK3588_Android10.0_SDK.git
+	# url = "ssh://git@192.168.202.221:2222/android-vir-group/rk3588/android10/paas_10.git"
+	url = "ssh://git@192.168.134.9:2222/android-vir-group/rk3588/android10/paas_10.git"
+	# url = "ssh://admin@code.vclusters.com:29418/vclusters/Rockchip_RK3588_Android10.0_SDK"
+	
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[branch "public"]
+	remote = origin
+	merge = refs/heads/public
+	vscode-merge-base = origin/public
+[branch "sdk_ex"]
+	remote = origin
+	merge = refs/heads/sdk_ex
+	vscode-merge-base = origin/sdk_ex
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+	vscode-merge-base = origin/main
+[branch "main_hwc3"]
+	remote = origin
+	merge = refs/heads/main_hwc3
+	vscode-merge-base = origin/main_hwc3
+[branch "rk3588_virtual_cloud_phone_4_webrtc"]
+	remote = origin
+	merge = refs/heads/rk3588_virtual_cloud_phone_4_webrtc
+	vscode-merge-base = origin/rk3588_virtual_cloud_phone_4_webrtc
+[branch "sdk_ex_pause"]
+	vscode-merge-base = origin/sdk_ex
+[branch "76e176a2dd"]
+	vscode-merge-base = origin/main
+[branch "rk3588_virtual_tencent_IaaS_magisk"]
+	remote = origin
+	merge = refs/heads/rk3588_virtual_tencent_IaaS_magisk
+	vscode-merge-base = origin/rk3588_virtual_tencent_IaaS_magisk
+[branch "release/VC.20250227.165"]
+	remote = origin
+	merge = refs/heads/release/VC.20250227.165
+	vscode-merge-base = origin/release/VC.20250227.165
+[branch "rk3588_public_sdk"]
+	remote = origin
+	merge = refs/heads/rk3588_public_sdk
+	vscode-merge-base = origin/rk3588_public_sdk
+[branch "main_tencent"]
+	remote = origin
+	merge = refs/heads/main_tencent
+	vscode-merge-base = origin/main_tencent
+[branch "main_szx"]
+	remote = origin
+	merge = refs/heads/main_szx
+	vscode-merge-base = origin/main_szx
+[pull]
+	rebase = true
+[branch "sdk"]
+	remote = origin
+	merge = refs/heads/sdk
+	vscode-merge-base = origin/master
+[branch "debug/20250704_public_tencent"]
+	vscode-merge-base = origin/public
+[branch "release/187"]
+	remote = origin
+	merge = refs/heads/release/187
+[branch "release/193"]
+	remote = origin
+	merge = refs/heads/release/193
+	vscode-merge-base = origin/release/193
+[branch "public_minfps"]
+	remote = origin
+	merge = refs/heads/public_minfps
+[branch "pass_virtual_cloud_phone_xingyao"]
+	remote = origin
+	merge = refs/heads/pass_virtual_cloud_phone_xingyao
+[branch "main_tongyi"]
+	remote = origin
+	merge = refs/heads/main_tongyi
+[branch "main_ipv6"]
+	remote = origin
+	merge = refs/heads/main_ipv6
+[branch "main_miwan"]
+	remote = origin
+	merge = refs/heads/main_miwan
+[branch "main_nr"]
+	remote = origin
+	merge = refs/heads/main_nr
+[branch "main_nr2"]
+	remote = origin
+	merge = refs/heads/main_nr2
+[branch "main_szx_200.5"]
+	remote = origin
+	merge = refs/heads/main_szx_200.5
+[branch "main_szx_250515"]
+	remote = origin
+	merge = refs/heads/main_szx_250515
+[branch "main_szx_x"]
+	remote = origin
+	merge = refs/heads/main_szx_x
+[branch "main-defeature"]
+	remote = origin
+	merge = refs/heads/main-defeature
+[branch "main_hwc3_encrypt"]
+	remote = origin
+	merge = refs/heads/main_hwc3_encrypt
+[branch "cust041/by"]
+	remote = origin
+	merge = refs/heads/cust041/by
+[branch "cust041/mg"]
+	remote = origin
+	merge = refs/heads/cust041/mg
+[branch "cust041/ry"]
+	remote = origin
+	merge = refs/heads/cust041/ry
+[branch "cust041/ty"]
+	remote = origin
+	merge = refs/heads/cust041/ty

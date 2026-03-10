@@ -4,14 +4,15 @@ set /p ip_port=<ip_port.txt
 set HX=cx10
 adb -s %ip_port% shell "mkdir -p /data/local/"
 adb -s %ip_port% push .\%HX%\update_image.sh  /data/local/
-adb -s %ip_port% push .\%HX%\update_image_from_build.sh  /data/local/
+@REM adb -s %ip_port% push .\%HX%\update_image_from_build.sh  /data/local/
 adb -s %ip_port% push .\%HX%\load_cx10_image.sh /data/local/
-adb -s %ip_port% push .\%HX%\load_cx10_image_userdebug.sh /data/local/
+@REM adb -s %ip_port% push .\%HX%\load_cx10_image_userdebug.sh /data/local/
 adb -s %ip_port% push .\%HX%\b1_build_cx10_con1.sh /data/local/
 adb -s %ip_port% push .\%HX%\b2_build_cx10_con2.sh /data/local/
 adb -s %ip_port% push .\%HX%\b3_build_cx10_con3.sh /data/local/
 adb -s %ip_port% push .\%HX%\b4_build_cx10_con4.sh /data/local/
-adb -s %ip_port% push .\%HX%\b5_build_cx10_con5.sh /data/local/
+adb -s %ip_port% push .\%HX%\mb4_build_cx10_con4.sh /data/local/
+adb -s %ip_port% push .\%HX%\mb5_build_cx10_con5.sh /data/local/
 adb -s %ip_port% push .\%HX%\b6_build_cx10_con6.sh /data/local/
 adb -s %ip_port% push .\%HX%\b7_build_cx10_con7.sh /data/local/
 adb -s %ip_port% push .\%HX%\b8_build_cx10_con8.sh /data/local/

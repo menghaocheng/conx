@@ -13,7 +13,7 @@ mount super_img/product_a.img super_img/root/product -o rw
 mount super_img/vendor_a.img super_img/root/vendor -o rw
 rm super_img/root/vendor/etc/fstab.cix
 
-docker rmi -f cix_android:10
+docker rmi -f cix_android:10 > /dev/null 2>&1
 
 tar --xattrs -c -C super_img/root . | docker import -c 'ENTRYPOINT ["/init", "androidboot.hardware=cix"]' - cix_android:10
 
