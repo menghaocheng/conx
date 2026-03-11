@@ -2,7 +2,9 @@ set /p ip_port=<ip_port.txt
 ::adb connect %ip_port%
 ::adb -s %ip_port% root
 set HX=myt-cx10
-adb -s %ip_port% shell "mkdir -p /data/local/"
+
+:: Create symlink /data/local -> /mmc/local for more disk space
+adb -s %ip_port% shell "mkdir -p /mmc/local && ln -sf /mmc/local /data/local"
 adb -s %ip_port% push .\%HX%\update_image.sh  /data/local/
 @REM adb -s %ip_port% push .\%HX%\update_image_from_build.sh  /data/local/
 adb -s %ip_port% push .\%HX%\load_cx10_image.sh /data/local/

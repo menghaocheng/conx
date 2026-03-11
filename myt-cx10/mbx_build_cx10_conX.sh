@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# cix_android:10 on MYT hardware (device A: 192.168.11.40)
-# Requires patched init at /data/local/cix_init_patched (bypasses hwcheck)
+# cix_android:10 on MYT hardware
 # Post-start fixes: binder device replacement + cpuset population
-
-PATCHED_INIT="/data/local/cix_init_patched"
 
 careate_bridge_network() {
     docker network create --driver=bridge --subnet=192.168.15.0/24 \
@@ -74,7 +71,7 @@ create_container() {
     #rm -fr "/data/local/$name"
 
     docker create  \
-        --restart=always \
+        --restart=no \
         --hostname=${name} \
         --name=${name} \
         --network=bridge_new \
@@ -84,7 +81,6 @@ create_container() {
         --memory 8G \
         --memory-swap 10G \
         -v /data/local/${name}:/data \
-        -v ${PATCHED_INIT}:/system/bin/init \
         --device /dev/${binder_dev}:/dev/binder:rwm \
         --device /dev/${hwbinder_dev}:/dev/hwbinder:rwm \
         --device /dev/${vndbinder_dev}:/dev/vndbinder:rwm \
@@ -125,7 +121,7 @@ create_container() {
         androidboot.hardware=cix \
         androidboot.redroid_net_ndns=2 \
         androidboot.redroid_net_dns1=223.5.5.5 \
-        androidboot.redroid_net_dns2=223.6.6.6 \
+        androidboot.redroid_net_dns2=223.6.6.6
 
     docker start "$name"
 

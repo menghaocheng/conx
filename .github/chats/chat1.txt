@@ -1,5 +1,16 @@
 
 1. 
 A设备：adb connect 192.168.11.40:5555
-B设备：adb connect 192.168.11.45:5555
+B设备：adb connect 192.168.11.25:5555
+
+2. 请分析A设备:docker inspect 4934ca54c427的输出，然后反推出其创建容器时的参数
+
+3. A设备中的镜像cix_android:10原本是适用于设备B的
+
+4.con4是用/data/local/mb4_build_cx10_con4.sh（对应本地的是D:\WorkScript\C24\conx\cx10\mb4_build_cx10_con4.sh）创建
+它现在运行不起来
+
+5. 请根据docker inspect 4934ca54c427优化D:\WorkScript\C24\conx\cx10\mb4_build_cx10_con4.sh,
+最终让con4正常运行起来
+
 
