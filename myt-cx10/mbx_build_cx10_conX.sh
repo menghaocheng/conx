@@ -147,5 +147,5 @@ create_container() {
 
 careate_bridge_network
 
-create_container 5
+create_container $1
 
