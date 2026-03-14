@@ -10,37 +10,6 @@ careate_bridge_network() {
         bridge_new 2>/dev/null
 }
 
-get_binder_minor() {
-    grep " ${1}$" /proc/misc | awk '{print $1}'
-}
-
-fix_binder_devices() {
-    local name=$1
-    local binder_minor=$(get_binder_minor "$2")
-    local hwbinder_minor=$(get_binder_minor "$3")
-    local vndbinder_minor=$(get_binder_minor "$4")
-
-    # Tight loop: fix binder ASAP after container start
-    for attempt in 1 2 3 4 5 6 7 8 9 10; do
-        if docker exec "$name" sh -c "\
-            rm -f /dev/binder /dev/hwbinder /dev/vndbinder; \
-            rm -f /dev/binder[0-9] /dev/binder[0-9][0-9]; \
-            mknod /dev/binder c 10 ${binder_minor}; \
-            mknod /dev/hwbinder c 10 ${hwbinder_minor}; \
-            mknod /dev/vndbinder c 10 ${vndbinder_minor}; \
-            chmod 666 /dev/binder /dev/hwbinder /dev/vndbinder" 2>/dev/null; then
-            echo "Binder fixed on attempt $attempt"
-            break
-        fi
-        sleep 0.2
-    done
-
-    # Restart servicemanager to pick up the correct binder devices
-    docker exec "$name" setprop ctl.restart servicemanager 2>/dev/null
-    docker exec "$name" setprop ctl.restart hwservicemanager 2>/dev/null
-    docker exec "$name" setprop ctl.restart vndservicemanager 2>/dev/null
-}
-
 fix_cpuset() {
     local name=$1
     docker exec "$name" sh -c '\
@@ -57,8 +26,9 @@ fix_cpuset() {
 create_container() {
     local num=$1
     local name="con$num"
-    local adb_port=$((5000 + num))
     local mac=f0:d7:af:c4:65:$(printf '%02x' $((0x40 + num)))
+
+    local adb_port=$((5000 + num))
 
     # binder devices: con N uses binder[(N-1)*3+1], binder[(N-1)*3+2], binder[(N-1)*3+3]
     local binder_base=$(( (num - 1) * 3 + 1 ))
@@ -84,6 +54,9 @@ create_container() {
         --device /dev/${binder_dev}:/dev/binder:rwm \
         --device /dev/${hwbinder_dev}:/dev/hwbinder:rwm \
         --device /dev/${vndbinder_dev}:/dev/vndbinder:rwm \
+        --device /dev/${binder_dev}:/dev/conx_binder:rwm \
+        --device /dev/${hwbinder_dev}:/dev/conx_hwbinder:rwm \
+        --device /dev/${vndbinder_dev}:/dev/conx_vndbinder:rwm \
         --device /dev/dri \
         --device /dev/fuse \
         --device /dev/dma_heap/system \
@@ -118,6 +91,7 @@ create_container() {
         -p ${adb_port}:5555 \
         --env PATH=/sbin:/system/sbin:/product/bin:/apex/com.android.runtime/bin:/system/bin:/system/xbin:/odm/bin:/vendor/bin:/vendor/xbin:/data/local/tmp/plugin/bin \
         cix_android:10 \
+        androidboot.conx_binder_fix=1 \
         androidboot.hardware=cix \
         androidboot.redroid_net_ndns=2 \
         androidboot.redroid_net_dns1=223.5.5.5 \
@@ -125,9 +99,7 @@ create_container() {
 
     docker start "$name"
 
-    # --privileged exposes ALL host binder devices including the global /dev/binder.
-    # Fix binder ASAP, then restart servicemanager to use correct devices.
-    fix_binder_devices "$name" "$binder_dev" "$hwbinder_dev" "$vndbinder_dev"
+    # Binder is now corrected inside the image during init in docker mode.
     fix_cpuset "$name"
 
     echo "Container $name started. Waiting for Android boot..."
@@ -145,3 +117,13 @@ careate_bridge_network
 
 create_container $1
 
+
+        # -p ${port_base}:5555 \
+        # -p $((port_base+1)):9082 \
+        # -p $((port_base+2)):9083 \
+        # -p $((port_base+3)):10000 \
+        # -p $((port_base+4)):10001/udp \
+        # -p $((port_base+5)):10006 \
+        # -p $((port_base+6)):10007/udp \
+        # -p $((port_base+7)):10008 \
+        # -p $((port_base+8)):10008/udp \
