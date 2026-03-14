@@ -4,7 +4,8 @@ set /p ip_port=<ip_port.txt
 set HX=myt-cx10
 
 :: Create symlink /data/local -> /mmc/local for more disk space
-adb -s %ip_port% shell "mkdir -p /mmc/local && ln -sf /mmc/local /data/local"
+:: If /data/local is already a real directory, migrate its contents first.
+adb -s %ip_port% shell "mkdir -p /mmc/local; if [ -L /data/local ]; then ln -snf /mmc/local /data/local; else rm -f /data/local/local 2>/dev/null; cp -a /data/local/. /mmc/local/ 2>/dev/null; rm -rf /data/local; ln -s /mmc/local /data/local; fi"
 adb -s %ip_port% push .\%HX%\update_image.sh  /data/local/
 @REM adb -s %ip_port% push .\%HX%\update_image_from_build.sh  /data/local/
 adb -s %ip_port% push .\%HX%\load_cx10_image.sh /data/local/

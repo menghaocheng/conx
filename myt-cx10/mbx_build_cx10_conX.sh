@@ -1,26 +1,13 @@
 #!/bin/bash
 
 # cix_android:10 on MYT hardware
-# Post-start fixes: binder device replacement + cpuset population
+# Binder and cpuset are now repaired inside the image during boot.
 
 careate_bridge_network() {
     docker network create --driver=bridge --subnet=192.168.15.0/24 \
         -o com.docker.network.bridge.enable_ip_masquerade=true \
         -o com.docker.network.bridge.enable_icc=true \
         bridge_new 2>/dev/null
-}
-
-fix_cpuset() {
-    local name=$1
-    docker exec "$name" sh -c '\
-        cpus=$(cat /dev/cpuset/cpuset.cpus); \
-        mems=$(cat /dev/cpuset/cpuset.mems); \
-        for dir in foreground background top-app system-background restricted; do \
-            if [ -d "/dev/cpuset/$dir" ]; then \
-                echo "$cpus" > "/dev/cpuset/$dir/cpuset.cpus" 2>/dev/null; \
-                echo "$mems" > "/dev/cpuset/$dir/cpuset.mems" 2>/dev/null; \
-            fi; \
-        done'
 }
 
 create_container() {
@@ -41,7 +28,7 @@ create_container() {
     #rm -fr "/data/local/$name"
 
     docker create  \
-        --restart=no \
+        --restart=unless-stopped \
         --hostname=${name} \
         --name=${name} \
         --network=bridge_new \
@@ -98,9 +85,6 @@ create_container() {
         androidboot.redroid_net_dns2=223.6.6.6
 
     docker start "$name"
-
-    # Binder is now corrected inside the image during init in docker mode.
-    fix_cpuset "$name"
 
     echo "Container $name started. Waiting for Android boot..."
     for i in $(seq 1 60); do

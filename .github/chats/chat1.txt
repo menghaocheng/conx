@@ -14,3 +14,74 @@ B设备：adb connect 192.168.11.25:5555
 最终让con4正常运行起来
 
 
+我手动把最后 端口映射去掉了。现在容器是能正常跑起来的。现在con4的5555端口会映射到宿主的5004
+
+现在请看
+D:\WorkScript\C24\conx\myt-cx10\mbx_build_cx10_conX.sh的这段逻辑
+    # --privileged exposes ALL host binder devices including the global /dev/binder.
+    # Fix binder ASAP, then restart servicemanager to use correct devices.
+    fix_binder_devices "$name" "$binder_dev" "$hwbinder_dev" "$vndbinder_dev"
+    fix_cpuset "$name"
+
+    echo "Container $name started. Waiting for Android boot..."
+    for i in $(seq 1 60); do
+        if docker exec "$name" getprop sys.boot_completed 2>/dev/null | grep -q 1; then
+            echo "Container $name boot completed!"
+            return 0
+        fi
+        sleep 2
+    done
+
+我想把它内置到容器镜像中，代码在Y:\56T\cx10#关键部分可能在Y:\56T\cx10\android10\system\core\init
+可通过 ssh mhc@192.168.164.2连接到linux环境
+**编译**：
+编译完整镜像：
+/home/mhc/56T/cx10/android10
+./make_image.sh --build mp
+编译模块：
+source build/envsetup.sh >/dev/null
+lunch sky1_evb-user
+
+
+**拷贝并导入镜像**
+在测试设备中执行
+cd /data/local/
+./update_image.sh
+./load_cx10_image.sh
+
+#./mb4_build_cx10_con4.sh #创建容器你或需要调整
+
+以上只是提供了相关的条件，并不假定或限制你用什么方式调试。你是虚拟化专家，请以目标为引向持续迭代，直到达到目标或有阶段性的结论
+
+开始前有什么疑问可以向我提问
+
+
+在开始前，我有几个问题：
+
+1.Y:\56T\cx10 是映射到 192.168.164.2 上的路径吗？ 即 cx10 = ssh mhc@192.168.164.2 后的 /home/mhc/56T/cx10？这样我可以通过 SSH 直接查看和修改源码。
+—— Y:\56T\cx10是映射到windows环境的路径，对应linux环境的192.168.164.2:/home/mhc/56T
+2.编译环境：编译完整镜像用 ./make_image.sh --build mp，编译 init 模块的话是 mmm system/core/init 吗？这样可以加快迭代速度。
+—— 我之前没有这样调试，按Android编译系统应该是可以的，你可以尝试用这种方式调试
+3.binder 的容器编号信息：容器启动时，binder 设备的正确 minor 号是从宿主 /proc/misc 读取的。内置到镜像后，容器内看不到宿主的 /proc/misc。有两种方案：
+方案 A：通过环境变量（--env）把 binder minor 号传进去，init 启动时读取并修复
+方案 B：在 init 早期阶段，直接读容器内 /dev/binder 的设备号来判断是否需要修复（如果 minor 号不对就重建）
+方案 C：不在 init 里改，而是在容器镜像里加一个 init.rc 的 on early-init 脚本来做
+你倾向哪种方案？还是让我自行判断最优解？
+—— 容器创建脚本已经根据monor号把选中的binder映射到容器中以不带下标的形式存在，是否在容器内部只要把带下标的biner都删除即可？
+如果是这样，那么方案A应该还需要传minor号吗？
+我没太理解方案A和B的关键区别是什么
+方案C是我之前没想到的，可以考虑。
+总之，请再次确认再开始
+
+
+我的疑问不没有解决：
+/dev/binder10
+/dev/binder11
+/dev/binder12
+已经通过
+-v分别映射成容器的
+/dev/biner
+/dev/hwbiner
+/dev/vndbiner
+而容器中默认就是打开这些节点，其它的如binder13 binder14 binder15是怎么映射到正常功能的，按理servicemanager打开的也是正确的呀
+而且servicemanager启动比init晚吧？我的理解是如果在init中已经把带下标的，如binder13 binder14之类的删掉，那其它进程不就没机会看到这些可能干扰的节点了吗？
