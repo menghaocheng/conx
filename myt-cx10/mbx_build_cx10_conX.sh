@@ -3,7 +3,7 @@
 # cix_android:10 on MYT hardware
 # Binder and cpuset are now repaired inside the image during boot.
 
-careate_bridge_network() {
+create_bridge_network() {
     docker network create --driver=bridge --subnet=192.168.15.0/24 \
         -o com.docker.network.bridge.enable_ip_masquerade=true \
         -o com.docker.network.bridge.enable_icc=true \
@@ -74,7 +74,6 @@ create_container() {
         --env prop.ro.hide.vpspath.hide=1 \
         --env prop.ro.hide.vps.debug=1 \
         --env prop.hide.mtrace.enable=1 \
-        --mac-address=${mac} \
         -p ${adb_port}:5555 \
         --env PATH=/sbin:/system/sbin:/product/bin:/apex/com.android.runtime/bin:/system/bin:/system/xbin:/odm/bin:/vendor/bin:/vendor/xbin:/data/local/tmp/plugin/bin \
         cix_android:10 \
@@ -97,7 +96,7 @@ create_container() {
     echo "Warning: Container $name boot did not complete within 120s"
 }
 
-careate_bridge_network
+create_bridge_network
 
 create_container $1
 

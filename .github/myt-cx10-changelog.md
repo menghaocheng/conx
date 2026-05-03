@@ -22,6 +22,15 @@
   - `device/cix/sky1/sky1_evb/init.rc` 在 `ro.boot.conx_binder_fix=1` 分支中保留 Docker 映射，并在 `on init` 时把标准 `/dev/binder*` 重定向到 `/dev/conx_*`
   - servicemanager / hwservicemanager / vndservicemanager 从启动开始就打开正确的 binder 设备，无需宿主脚本再干预
 
+### 2.1 B 设备默认 binderfs 路径回归与修复
+
+- **现象**：B 设备原始脚本 `cx10/b4_build_cx10_con4.sh` 不传 `androidboot.conx_binder_fix=1`，应当完全走默认 binderfs 路径；但在一次中间改动后，B 容器内没有 `/dev/binderfs` 和 `/dev/binder*`，`zygote` 持续 `restarting`
+- **根因**：把原本无条件执行的 `on early-init` binderfs 初始化错误改成了带条件的分支，导致 B 因为没有 `ro.boot.conx_binder_fix` 属性而完全跳过默认 binderfs 初始化
+- **最终修复**：恢复 `device/cix/sky1/sky1_evb/init.rc` 中默认 binderfs 路径为无条件 `on early-init`
+  - B 继续使用 binderfs 逻辑：`/dev/binder -> /dev/binderfs/binder`
+  - A 仅在 `on init && property:ro.boot.conx_binder_fix=1` 时改写标准 binder 节点到 `/dev/conx_*`
+  - 两条路径共享同一镜像，但在 boot 参数处分流，互不干扰
+
 ### 3. Cpuset 子 cgroup
 
 - **现象**：cpuset 子目录（foreground/background/top-app 等）的 cpus/mems 为空，进程无法被调度
@@ -56,7 +65,7 @@
 | `ip_port.txt` | 更新为 `192.168.11.40:5555` |
 | `myt-cx10/mbx_build_cx10_conX.sh` | 去掉 `PATCHED_INIT` 和 init 挂载（源码已修复 hwcheck）；最终版本只负责创建容器并等待 boot，不再做宿主侧 binder/cpuset 修复 |
 | `myt-cx10/load_cx10_image.sh` | 简化为直接在当前目录操作（软链接已解决空间问题） |
-| `device/cix/sky1/sky1_evb/init.rc` | 新增 `ro.boot.conx_binder_fix=1` 分支，在镜像内完成 binder 定向 |
+| `device/cix/sky1/sky1_evb/init.rc` | 保持默认无条件 binderfs early-init 路径，同时新增 `ro.boot.conx_binder_fix=1` 的 init 阶段分支，在镜像内完成 MYT 容器 binder 定向 |
 | `device/cix/sky1/sky1_evb/init.docker.rc` | 新增 `conx_cpuset_fix` 服务和启动触发 |
 | `device/cix/sky1/cix_docker_android.mk` | 把 `conx_cpuset_fix.sh` 打包到 `vendor/bin` |
 
@@ -91,7 +100,7 @@ cd /data/local
 
 ## 最终验证结果
 
-- 新镜像已在设备 A 上重新导入，Docker 镜像 `cix_android:10` 更新成功
+- 新镜像已分别在设备 A / B 上重新导入并完成回归验证
 - 使用**不含宿主侧 binder/cpuset 兜底**的 `myt-cx10/mbx_build_cx10_conX.sh` 重建 `con4` 后：
   - `docker inspect con4` 状态为 `running|true|0`
   - `getprop sys.boot_completed` 返回 `1`
@@ -100,6 +109,13 @@ cd /data/local
   - `/dev/vndbinder -> /dev/conx_vndbinder`
   - `foreground/background/top-app` 的 `cpuset.cpus` 均为 `0-11`
 - 额外验证容器 `con6_nofix` 也在完全不执行宿主修复逻辑的情况下成功启动并 `boot_completed=1`
+- B 设备使用原始脚本 `cx10/b4_build_cx10_con4.sh` 重建 `con4` 后：
+  - `docker inspect con4` 状态为 `running|true|0`
+  - `getprop init.svc.zygote` 返回 `running`
+  - `getprop sys.boot_completed` 返回 `1`
+  - `/dev/binder -> /dev/binderfs/binder`
+  - `/dev/hwbinder -> /dev/binderfs/hwbinder`
+  - `/dev/vndbinder -> /dev/binderfs/vndbinder`
 
 ## 备注
 

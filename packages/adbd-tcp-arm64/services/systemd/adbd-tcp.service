@@ -1,0 +1,15 @@
+[Unit]
+Description=ADB daemon on TCP port 5555
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=ADBD_TCP_PORT=5555
+ExecStartPre=/bin/sh -c 'killall adbd 2>/dev/null || true'
+ExecStart=/usr/bin/adbd tcp:${ADBD_TCP_PORT}
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

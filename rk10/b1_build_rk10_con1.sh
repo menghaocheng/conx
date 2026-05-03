@@ -40,7 +40,7 @@ docker create  \
     --env prop.ro.hide.vps.debug=1 \
     --env prop.hide.mtrace.enable=1 \
     --env prop.hide.mtrace.prefix=HHHM==== \
-    --mac-address=f0:d7:af:c4:65:40 \
+    --mac-address=f0:d7:af:c4:65:10 \
     -p 5001:5555 \
     --env PATH=/system/bin:/system/sbin:/system/xbin:/system_ext/bin:/vendor/bin:/vendor/xbin:/odm/bin:/oem/bin:/product/bin:/data/bin:/data/local/tmp/plugin/bin \
     --dns=8.8.8.8 \

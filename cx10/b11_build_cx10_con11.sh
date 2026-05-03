@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 
-careate_bridge_network() {
+create_bridge_network() {
     # docker network rm bridge_new
     # docker network create --driver=bridge --subnet=192.168.15.0/24 bridge_new 2>/dev/null
 
@@ -64,7 +64,7 @@ create_container() {
     docker start "$name"
 }
 
-careate_bridge_network
+create_bridge_network
 
 create_container 11
 

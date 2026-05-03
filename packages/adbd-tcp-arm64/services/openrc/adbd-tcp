@@ -1,0 +1,20 @@
+#!/sbin/openrc-run
+
+name="adbd-tcp"
+description="ADB daemon listening on TCP port 5555"
+command="/usr/bin/adbd"
+command_args="tcp:${ADBD_TCP_PORT:-5555}"
+command_background="yes"
+pidfile="/run/${RC_SVCNAME}.pid"
+output_log="/var/log/adbd-tcp.log"
+error_log="/var/log/adbd-tcp.log"
+
+depend() {
+    need net
+}
+
+start_pre() {
+    checkpath --directory --mode 0755 /var/log
+    touch /var/log/adbd-tcp.log
+    killall adbd 2>/dev/null || true
+}

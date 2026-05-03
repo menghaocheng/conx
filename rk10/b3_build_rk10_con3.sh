@@ -44,6 +44,7 @@ docker create  \
     --dns-search=. \
     rk3588:RK_ANDROID10-RKR10 \
 
+#--mac-address=f0:d7:af:c4:65:30 \
 #--env prop.persist.hide.customization=mp-jz \
 #-v /data/local/con3:/data \
 #        -v /var/lib/lxcfs/proc/cpuinfo:/proc/cpuinfo:rw  \
