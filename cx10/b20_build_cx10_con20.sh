@@ -66,5 +66,5 @@ create_container() {
 
 create_bridge_network
 
-create_container 4
+create_container 20
 

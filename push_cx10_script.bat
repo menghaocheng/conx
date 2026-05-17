@@ -26,7 +26,11 @@ adb -s %ip_port% push .\%HX%\b16_build_cx10_con16.sh /data/local/
 adb -s %ip_port% push .\%HX%\b17_build_cx10_con17.sh /data/local/
 adb -s %ip_port% push .\%HX%\b18_build_cx10_con18.sh /data/local/
 adb -s %ip_port% push .\%HX%\b19_build_cx10_con19.sh /data/local/
-adb -s %ip_port% push .\%HX%\b10_build_cx10_con20.sh /data/local/
+adb -s %ip_port% push .\%HX%\b20_build_cx10_con20.sh /data/local/
+adb -s %ip_port% push .\%HX%\b21_build_cx10_con21.sh /data/local/
+adb -s %ip_port% push .\%HX%\b22_build_cx10_con22.sh /data/local/
+adb -s %ip_port% push .\%HX%\b23_build_cx10_con23.sh /data/local/
+adb -s %ip_port% push .\%HX%\b24_build_cx10_con24.sh /data/local/
 adb -s %ip_port% push .\%HX%\bx_build_cx10_conX.sh /data/local/
 adb -s %ip_port% push .\%HX%\by_build_cx10_con1-20.sh /data/local/
 adb -s %ip_port% shell "chmod 777 /data/local/*.sh"
